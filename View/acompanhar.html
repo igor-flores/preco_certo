@@ -1,0 +1,42 @@
+<header class="loja-topo">
+    <div class="interno">
+        <h1 id="nome-negocio">Acompanhar pedido</h1>
+        <div class="loja-info" id="info-pedido"></div>
+    </div>
+</header>
+
+<main class="loja-conteudo" id="conteudo" tabindex="-1">
+    <div id="erro-carregamento" hidden></div>
+
+    <div id="area-acompanhamento" class="pilha" hidden>
+        <section class="cartao situacao-atual" aria-labelledby="rotulo-situacao" aria-live="polite">
+            <i class="fa-solid fa-hourglass-half" id="icone-situacao" aria-hidden="true"></i>
+            <span class="texto-suave texto-pequeno">Situação do seu pedido</span>
+            <span class="rotulo-situacao" id="rotulo-situacao"></span>
+            <div class="progresso" id="progresso" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+            <span class="texto-suave texto-pequeno" id="atualizado-em"></span>
+        </section>
+
+        <section class="cartao pilha" aria-labelledby="titulo-historico">
+            <h2 id="titulo-historico">Histórico</h2>
+            <ol class="linha-tempo" id="historico"></ol>
+        </section>
+
+        <section class="cartao pilha" aria-labelledby="titulo-itens">
+            <h2 id="titulo-itens">Seu pedido</h2>
+            <ul class="resumo-pedido" id="itens"></ul>
+            <dl class="dados-confirmacao" id="dados"></dl>
+        </section>
+
+        <section class="cartao pilha" aria-labelledby="titulo-link">
+            <h2 id="titulo-link">Guarde este link</h2>
+            <p class="texto-suave">Use este endereço para acompanhar o pedido a qualquer momento.</p>
+            <div class="linha">
+                <button type="button" class="botao botao-loja" id="copiar-link"><i class="fa-solid fa-copy" aria-hidden="true"></i>Copiar link</button>
+                <a class="botao botao-secundario" id="voltar-cardapio" hidden><i class="fa-solid fa-book-open" aria-hidden="true"></i>Voltar ao cardápio</a>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script type="module" src="{{PATH}}Assets/js/paginas/acompanhar.js?v={{VERSAO}}"></script>

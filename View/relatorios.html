@@ -1,0 +1,65 @@
+<header class="cabecalho-pagina">
+    <div>
+        <h1>Relatórios</h1>
+        <p class="texto-suave">Margem de lucro, crescimento e estimativa de vendas. Considera apenas pedidos concluídos.</p>
+    </div>
+</header>
+
+<section class="cartao pilha" aria-labelledby="titulo-financeiro">
+    <div class="cartao-cabecalho" style="margin-bottom: 0;">
+        <h2 id="titulo-financeiro">Relatório financeiro</h2>
+    </div>
+    <form class="filtros" id="form-financeiro" novalidate style="align-items: flex-start;">
+        <div class="campo" style="flex: 0 1 auto;">
+            <span class="rotulo" id="rotulo-periodo">Comparar por</span>
+            <div class="abas" role="group" aria-labelledby="rotulo-periodo" id="periodo-financeiro">
+                <button type="button" data-periodo="semana" aria-pressed="false">Semana</button>
+                <button type="button" data-periodo="mes" aria-pressed="true">Mês</button>
+                <button type="button" data-periodo="ano" aria-pressed="false">Ano</button>
+            </div>
+        </div>
+        <div class="campo" style="flex: 0 1 220px;">
+            <label for="referencia">Período de referência</label>
+            <input id="referencia" name="referencia" type="date" aria-describedby="dica-referencia">
+            <p class="dica" id="dica-referencia">Qualquer data dentro do período. Vazio = atual.</p>
+        </div>
+    </form>
+    <div id="aviso-financeiro" aria-live="polite"></div>
+    <div class="indicadores" id="indicadores-financeiro" aria-live="polite"></div>
+    <div class="grafico">
+        <canvas id="grafico-financeiro" role="img" aria-label="Gráfico comparando faturamento, custo e lucro do período atual e do anterior"></canvas>
+    </div>
+</section>
+
+<section class="cartao pilha" aria-labelledby="titulo-estimativa">
+    <div class="cartao-cabecalho" style="margin-bottom: 0;">
+        <h2 id="titulo-estimativa">Estimativa de vendas</h2>
+    </div>
+    <form class="filtros" id="form-estimativa" novalidate>
+        <div class="campo" style="flex: 0 1 200px;">
+            <label for="periodo-estimativa">Período</label>
+            <select id="periodo-estimativa" name="periodo">
+                <option value="semana">Semanal</option>
+                <option value="mes" selected>Mensal</option>
+                <option value="ano">Anual</option>
+            </select>
+        </div>
+        <div class="campo" style="flex: 0 1 240px;">
+            <label for="quantidade-periodos">Basear nos últimos</label>
+            <select id="quantidade-periodos" name="periodos">
+                <option value="3">3 períodos</option>
+                <option value="6" selected>6 períodos</option>
+                <option value="12">12 períodos</option>
+            </select>
+        </div>
+    </form>
+    <div id="aviso-estimativa" aria-live="polite"></div>
+    <div class="indicadores" id="indicadores-estimativa" aria-live="polite"></div>
+    <div class="grafico">
+        <canvas id="grafico-estimativa" role="img" aria-label="Gráfico do faturamento dos períodos anteriores e da estimativa para o período atual"></canvas>
+    </div>
+    <p class="texto-suave texto-pequeno">A estimativa usa a tendência (regressão linear) dos períodos anteriores e é uma referência, não uma garantia.</p>
+</section>
+
+<script src="{{PATH}}Assets/vendor/chartjs/chart.umd.js"></script>
+<script type="module" src="{{PATH}}Assets/js/paginas/relatorios.js?v={{VERSAO}}"></script>

@@ -1,0 +1,148 @@
+<header class="cabecalho-pagina">
+    <div>
+        <h1>Pedidos</h1>
+        <p class="texto-suave">Acompanhe os pedidos e atualize a situação. O cliente vê cada mudança no link de acompanhamento.</p>
+    </div>
+    <button type="button" class="botao" id="botao-novo">
+        <i class="fa-solid fa-plus" aria-hidden="true"></i>Pedido manual
+    </button>
+</header>
+
+<div class="filtros">
+    <div class="campo" style="flex: 3;">
+        <span class="rotulo" id="rotulo-situacao">Situação</span>
+        <div class="abas" role="group" aria-labelledby="rotulo-situacao" id="filtro-situacao">
+            <button type="button" data-situacao="" aria-pressed="true">Todos</button>
+            <button type="button" data-situacao="aguardando_confirmacao" aria-pressed="false">Aguardando</button>
+            <button type="button" data-situacao="em_producao" aria-pressed="false">Em produção</button>
+            <button type="button" data-situacao="pronto_retirada" aria-pressed="false">Prontos</button>
+            <button type="button" data-situacao="em_rota_entrega" aria-pressed="false">Em rota</button>
+            <button type="button" data-situacao="concluido" aria-pressed="false">Concluídos</button>
+            <button type="button" data-situacao="cancelado" aria-pressed="false">Cancelados</button>
+        </div>
+    </div>
+    <div class="campo">
+        <label for="filtro-origem">Origem</label>
+        <select id="filtro-origem">
+            <option value="">Todas</option>
+            <option value="cardapio">Cardápio online</option>
+            <option value="manual">Manual</option>
+        </select>
+    </div>
+</div>
+
+<div class="linha linha-entre">
+    <span class="texto-suave texto-pequeno" id="status-atualizacao" aria-live="polite"></span>
+    <button type="button" class="botao botao-secundario botao-pequeno" id="botao-atualizar">
+        <i class="fa-solid fa-rotate" aria-hidden="true"></i>Atualizar
+    </button>
+</div>
+
+<section aria-labelledby="titulo-lista">
+    <h2 id="titulo-lista" class="visualmente-oculto">Lista de pedidos</h2>
+    <div id="lista" class="lista-pedidos"></div>
+    <div class="carregar-mais" style="margin-top: 1rem;">
+        <button type="button" class="botao botao-secundario" id="carregar-mais" hidden>Carregar mais pedidos</button>
+    </div>
+</section>
+
+<dialog class="dialogo dialogo-largo" id="dialogo-detalhe" aria-labelledby="titulo-detalhe">
+    <div class="dialogo-conteudo">
+        <div class="dialogo-cabecalho">
+            <h2 id="titulo-detalhe">Pedido</h2>
+            <button type="button" class="botao botao-icone" data-fechar-dialogo aria-label="Fechar">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="dialogo-corpo" id="detalhe-corpo"></div>
+        <form class="dialogo-rodape" id="form-situacao" novalidate>
+            <div class="campo" style="flex: 1; min-width: 200px;">
+                <label for="nova-situacao" class="visualmente-oculto">Nova situação</label>
+                <select id="nova-situacao" name="situacao"></select>
+            </div>
+            <button type="submit" class="botao">Atualizar situação</button>
+        </form>
+    </div>
+</dialog>
+
+<dialog class="dialogo dialogo-largo" id="dialogo-novo" aria-labelledby="titulo-novo">
+    <form class="dialogo-conteudo" id="form-novo" novalidate>
+        <div class="dialogo-cabecalho">
+            <h2 id="titulo-novo">Pedido manual</h2>
+            <button type="button" class="botao botao-icone" data-fechar-dialogo aria-label="Fechar">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="dialogo-corpo formulario">
+            <p class="texto-suave">Registre vendas feitas pelo WhatsApp, telefone ou no balcão.</p>
+            <div class="alerta alerta-erro erro-geral" role="alert" hidden></div>
+            <div class="grade-campos">
+                <div class="campo">
+                    <label for="novo-nome">Nome do cliente</label>
+                    <input id="novo-nome" name="nome" type="text" maxlength="120" autocomplete="off" required>
+                </div>
+                <div class="campo">
+                    <label for="novo-telefone">Telefone com DDD</label>
+                    <input id="novo-telefone" name="telefone" type="tel" placeholder="(51) 99999-9999" autocomplete="off" required>
+                </div>
+            </div>
+            <fieldset class="campo" style="border: 0; padding: 0; margin: 0;">
+                <legend class="rotulo" style="margin-bottom: 0.35rem;">Tipo de entrega</legend>
+                <div class="opcoes-radio">
+                    <label class="opcao-radio"><input type="radio" name="tipoEntrega" value="retirada" checked><span><i class="fa-solid fa-store" aria-hidden="true"></i>Retirada</span></label>
+                    <label class="opcao-radio"><input type="radio" name="tipoEntrega" value="entrega"><span><i class="fa-solid fa-motorcycle" aria-hidden="true"></i>Entrega</span></label>
+                </div>
+            </fieldset>
+            <div class="grade-campos" id="campos-entrega" hidden>
+                <div class="campo" style="grid-column: span 2;">
+                    <label for="novo-endereco">Endereço de entrega</label>
+                    <input id="novo-endereco" name="endereco" type="text" maxlength="255" autocomplete="off">
+                </div>
+                <div class="campo">
+                    <label for="novo-taxa">Taxa de entrega (R$)</label>
+                    <input id="novo-taxa" name="taxaEntrega" type="text" inputmode="decimal" placeholder="0,00">
+                </div>
+            </div>
+            <div class="grade-campos">
+                <div class="campo">
+                    <label for="novo-pagamento">Forma de pagamento</label>
+                    <input id="novo-pagamento" name="formaPagamento" type="text" maxlength="50" list="formas-pagamento" autocomplete="off" required>
+                    <datalist id="formas-pagamento"></datalist>
+                </div>
+                <div class="campo">
+                    <label for="novo-situacao">Situação inicial</label>
+                    <select id="novo-situacao" name="situacao">
+                        <option value="aguardando_confirmacao">Aguardando confirmação</option>
+                        <option value="em_producao">Em produção</option>
+                        <option value="concluido">Concluído (venda já entregue)</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="novo-data">Data da venda <span class="texto-suave">(opcional)</span></label>
+                    <input id="novo-data" name="dataPedido" type="datetime-local" aria-describedby="dica-data">
+                    <p class="dica" id="dica-data">Deixe em branco para usar agora.</p>
+                </div>
+            </div>
+            <fieldset class="campo" data-campo="itens" style="border: 0; padding: 0; margin: 0;">
+                <legend class="rotulo" style="margin-bottom: 0.5rem;">Itens</legend>
+                <div class="linhas-itens" id="linhas-itens"></div>
+                <div>
+                    <button type="button" class="botao botao-secundario botao-pequeno" id="adicionar-item">
+                        <i class="fa-solid fa-plus" aria-hidden="true"></i>Adicionar item
+                    </button>
+                </div>
+            </fieldset>
+            <div class="resumo-custo" role="status">
+                <div><span>Itens</span><strong id="novo-total-itens">R$ 0,00</strong></div>
+                <div><span>Taxa de entrega</span><strong id="novo-total-taxa">R$ 0,00</strong></div>
+                <div><span>Total do pedido</span><strong id="novo-total">R$ 0,00</strong></div>
+            </div>
+        </div>
+        <div class="dialogo-rodape">
+            <button type="button" class="botao botao-secundario" data-fechar-dialogo>Cancelar</button>
+            <button type="submit" class="botao">Registrar pedido</button>
+        </div>
+    </form>
+</dialog>
+
+<script type="module" src="{{PATH}}Assets/js/paginas/pedidos.js?v={{VERSAO}}"></script>

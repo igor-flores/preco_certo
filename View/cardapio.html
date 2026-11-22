@@ -1,0 +1,99 @@
+<header class="cabecalho-pagina">
+    <div>
+        <h1>Cardápio online</h1>
+        <p class="texto-suave">Escolha os produtos, as cores do seu negócio e como você recebe os pedidos.</p>
+    </div>
+</header>
+
+<section class="cartao" id="bloco-link" hidden aria-labelledby="titulo-link">
+    <div class="cartao-cabecalho">
+        <h2 id="titulo-link">Link público do cardápio</h2>
+    </div>
+    <div class="link-publico">
+        <code id="link-publico"></code>
+        <button type="button" class="botao botao-secundario" id="copiar-link">
+            <i class="fa-solid fa-copy" aria-hidden="true"></i>Copiar
+        </button>
+        <a class="botao botao-secundario" id="abrir-link" target="_blank" rel="noopener">
+            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>Abrir
+        </a>
+    </div>
+    <p class="dica texto-suave texto-pequeno" style="margin-top: 0.5rem;">Compartilhe esse link no WhatsApp e nas redes sociais. Ele não muda quando você altera o cardápio.</p>
+</section>
+
+<div class="duas-colunas">
+    <form class="cartao formulario" id="form-cardapio" novalidate aria-labelledby="titulo-config">
+        <h2 id="titulo-config">Configurações</h2>
+        <div class="alerta alerta-erro erro-geral" role="alert" hidden></div>
+
+        <div class="grade-campos">
+            <div class="campo">
+                <label for="cor-primaria-texto">Cor principal</label>
+                <div class="cores">
+                    <input type="color" id="cor-primaria" aria-label="Escolher cor principal">
+                    <input type="text" id="cor-primaria-texto" name="corPrimaria" maxlength="7" class="entrada" autocomplete="off">
+                </div>
+            </div>
+            <div class="campo">
+                <label for="cor-secundaria-texto">Cor de destaque</label>
+                <div class="cores">
+                    <input type="color" id="cor-secundaria" aria-label="Escolher cor de destaque">
+                    <input type="text" id="cor-secundaria-texto" name="corSecundaria" maxlength="7" class="entrada" autocomplete="off">
+                </div>
+            </div>
+        </div>
+
+        <div class="campo">
+            <label for="endereco">Endereço da loja <span class="texto-suave">(opcional)</span></label>
+            <input id="endereco" name="endereco" type="text" maxlength="255" autocomplete="street-address">
+        </div>
+
+        <div class="campo" data-campo="formasPagamento">
+            <label for="nova-forma">Formas de pagamento aceitas</label>
+            <div class="linha">
+                <input id="nova-forma" type="text" maxlength="40" class="entrada" style="flex: 1; min-width: 160px;" placeholder="Ex.: Pix" aria-describedby="dica-formas">
+                <button type="button" class="botao botao-secundario" id="adicionar-forma">Adicionar</button>
+            </div>
+            <p class="dica" id="dica-formas">Pressione Enter ou clique em Adicionar. Se não informar nenhuma, o cliente digita a forma de pagamento.</p>
+            <div class="etiquetas" id="formas-pagamento" aria-live="polite"></div>
+        </div>
+
+        <div class="campo">
+            <label for="taxa-entrega">Taxa de entrega (R$)</label>
+            <input id="taxa-entrega" name="taxaEntrega" type="text" inputmode="decimal" placeholder="0,00" aria-describedby="dica-taxa">
+            <p class="dica" id="dica-taxa">Use 0 para entrega grátis. Pedidos para retirada não pagam taxa.</p>
+        </div>
+
+        <fieldset class="campo" data-campo="produtos" style="border: 0; padding: 0; margin: 0;">
+            <legend class="rotulo" style="margin-bottom: 0.5rem;">Produtos exibidos no cardápio</legend>
+            <div class="linha linha-entre">
+                <span class="dica" id="contador-produtos"></span>
+                <button type="button" class="botao botao-texto botao-pequeno" id="selecionar-todos">Selecionar todos</button>
+            </div>
+            <div class="pilha" id="lista-produtos" style="gap: 0.5rem;"></div>
+        </fieldset>
+
+        <button type="submit" class="botao">
+            <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>Salvar cardápio
+        </button>
+    </form>
+
+    <section class="cartao" aria-labelledby="titulo-previa">
+        <div class="cartao-cabecalho">
+            <h2 id="titulo-previa">Prévia</h2>
+        </div>
+        <div class="previa-cardapio" aria-hidden="true">
+            <div class="previa-topo" id="previa-topo">
+                <strong style="font-size: 1.2rem;" id="previa-nome">Seu negócio</strong>
+                <div class="texto-pequeno" id="previa-endereco"></div>
+            </div>
+            <div class="previa-corpo" id="previa-produtos"></div>
+            <div class="previa-corpo" style="padding-top: 0;">
+                <div class="previa-botao" id="previa-botao">Fazer pedido</div>
+            </div>
+        </div>
+        <div class="pilha" style="margin-top: 1rem; gap: 0.5rem;" id="avisos-contraste" aria-live="polite"></div>
+    </section>
+</div>
+
+<script type="module" src="{{PATH}}Assets/js/paginas/cardapio.js?v={{VERSAO}}"></script>

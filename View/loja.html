@@ -1,0 +1,86 @@
+<header class="loja-topo">
+    <div class="interno">
+        <h1 id="nome-negocio">Carregando cardápio…</h1>
+        <div class="loja-info" id="loja-info"></div>
+    </div>
+</header>
+
+<main class="loja-conteudo" id="conteudo" tabindex="-1">
+    <div id="erro-carregamento" hidden></div>
+
+    <div id="area-pedido" hidden>
+        <ol class="etapas" aria-label="Etapas do pedido" id="etapas">
+            <li data-etapa="1" aria-current="step">Escolher itens</li>
+            <li data-etapa="2">Seus dados</li>
+            <li data-etapa="3">Confirmar</li>
+        </ol>
+
+        <section id="etapa-1" class="pilha" aria-labelledby="titulo-etapa-1" style="margin-top: 1.25rem;">
+            <h2 id="titulo-etapa-1" tabindex="-1">Escolha seus itens</h2>
+            <div class="produtos-loja" id="produtos"></div>
+        </section>
+
+        <section id="etapa-2" class="pilha" aria-labelledby="titulo-etapa-2" style="margin-top: 1.25rem;" hidden>
+            <h2 id="titulo-etapa-2" tabindex="-1">Seus dados</h2>
+            <form class="cartao formulario" id="form-dados" novalidate>
+                <div class="alerta alerta-erro erro-geral" role="alert" hidden></div>
+                <div class="campo">
+                    <label for="cliente-nome">Seu nome</label>
+                    <input id="cliente-nome" name="nome" type="text" maxlength="120" autocomplete="name" required>
+                </div>
+                <div class="campo">
+                    <label for="cliente-telefone">Telefone com DDD</label>
+                    <input id="cliente-telefone" name="telefone" type="tel" autocomplete="tel" placeholder="(51) 99999-9999" required>
+                </div>
+                <fieldset class="campo" style="border: 0; padding: 0; margin: 0;">
+                    <legend class="rotulo" style="margin-bottom: 0.35rem;">Como quer receber?</legend>
+                    <div class="opcoes-radio" id="opcoes-entrega">
+                        <label class="opcao-radio"><input type="radio" name="tipoEntrega" value="retirada" checked><span><i class="fa-solid fa-store" aria-hidden="true"></i>Retirar no local</span></label>
+                        <label class="opcao-radio"><input type="radio" name="tipoEntrega" value="entrega"><span><i class="fa-solid fa-motorcycle" aria-hidden="true"></i><span id="rotulo-entrega">Entrega</span></span></label>
+                    </div>
+                </fieldset>
+                <div class="campo" id="campo-endereco" hidden>
+                    <label for="cliente-endereco">Endereço de entrega</label>
+                    <input id="cliente-endereco" name="endereco" type="text" maxlength="255" autocomplete="street-address" placeholder="Rua, número, bairro e complemento">
+                </div>
+                <fieldset class="campo" id="campo-pagamento-opcoes" style="border: 0; padding: 0; margin: 0;" hidden>
+                    <legend class="rotulo" style="margin-bottom: 0.35rem;">Forma de pagamento</legend>
+                    <div class="opcoes-radio" id="opcoes-pagamento"></div>
+                </fieldset>
+                <div class="campo" id="campo-pagamento-texto" hidden>
+                    <label for="cliente-pagamento">Forma de pagamento</label>
+                    <input id="cliente-pagamento" type="text" maxlength="50" placeholder="Ex.: Pix">
+                </div>
+                <div class="linha linha-entre">
+                    <button type="button" class="botao botao-secundario" data-ir-etapa="1"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>Voltar</button>
+                    <button type="submit" class="botao botao-loja">Revisar pedido<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                </div>
+            </form>
+        </section>
+
+        <section id="etapa-3" class="pilha" aria-labelledby="titulo-etapa-3" style="margin-top: 1.25rem;" hidden>
+            <h2 id="titulo-etapa-3" tabindex="-1">Confirme seu pedido</h2>
+            <div class="cartao pilha">
+                <ul class="resumo-pedido" id="resumo-itens"></ul>
+                <dl class="dados-confirmacao" id="resumo-dados"></dl>
+                <div class="alerta alerta-erro" id="erro-envio" role="alert" hidden></div>
+                <div class="linha linha-entre">
+                    <button type="button" class="botao botao-secundario" data-ir-etapa="2"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>Voltar</button>
+                    <button type="button" class="botao botao-loja" id="confirmar-pedido"><i class="fa-solid fa-check" aria-hidden="true"></i>Confirmar pedido</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<div class="barra-carrinho" id="barra-carrinho" hidden>
+    <div class="interno">
+        <div class="resumo" aria-live="polite">
+            <span id="carrinho-quantidade" class="texto-suave texto-pequeno">0 itens</span>
+            <strong id="carrinho-total">R$ 0,00</strong>
+        </div>
+        <button type="button" class="botao botao-loja" id="avancar-dados">Continuar<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+    </div>
+</div>
+
+<script type="module" src="{{PATH}}Assets/js/paginas/loja.js?v={{VERSAO}}"></script>

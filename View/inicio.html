@@ -1,0 +1,31 @@
+<header class="cabecalho-pagina">
+    <div>
+        <h1 id="saudacao">Olá!</h1>
+        <p class="texto-suave" id="subtitulo-inicio">Resumo do mês atual, considerando pedidos concluídos.</p>
+    </div>
+    <a class="botao" href="{{PATH}}pedidos/?novo=1">
+        <i class="fa-solid fa-plus" aria-hidden="true"></i>Pedido manual
+    </a>
+</header>
+
+<section class="indicadores" id="indicadores" aria-label="Indicadores do mês" aria-live="polite"></section>
+
+<div class="duas-colunas">
+    <section class="cartao" aria-labelledby="titulo-pendentes">
+        <div class="cartao-cabecalho">
+            <h2 id="titulo-pendentes">Pedidos para atender</h2>
+            <a href="{{PATH}}pedidos/">Ver todos</a>
+        </div>
+        <div id="pedidos-pendentes" class="pilha" style="gap: 0.5rem;"></div>
+    </section>
+
+    <section class="cartao" aria-labelledby="titulo-cardapio">
+        <div class="cartao-cabecalho">
+            <h2 id="titulo-cardapio">Seu cardápio online</h2>
+            <a href="{{PATH}}cardapio/">Configurar</a>
+        </div>
+        <div id="resumo-cardapio"></div>
+    </section>
+</div>
+
+<script type="module" src="{{PATH}}Assets/js/paginas/inicio.js?v={{VERSAO}}"></script>

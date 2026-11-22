@@ -1,0 +1,93 @@
+<header class="cabecalho-pagina">
+    <div>
+        <h1>Produtos</h1>
+        <p class="texto-suave">Monte a receita de cada produto e veja o custo, o lucro e a margem de cada unidade.</p>
+    </div>
+    <button type="button" class="botao" id="botao-novo">
+        <i class="fa-solid fa-plus" aria-hidden="true"></i>Novo produto
+    </button>
+</header>
+
+<div class="filtros" role="search">
+    <div class="campo">
+        <span class="rotulo" id="rotulo-situacao">Mostrar</span>
+        <div class="abas" role="group" aria-labelledby="rotulo-situacao" id="filtro-ativo">
+            <button type="button" data-ativo="true" aria-pressed="true">Ativos</button>
+            <button type="button" data-ativo="false" aria-pressed="false">Desativados</button>
+            <button type="button" data-ativo="" aria-pressed="false">Todos</button>
+        </div>
+    </div>
+    <div class="campo">
+        <label for="busca">Buscar pelo nome</label>
+        <input id="busca" type="search" placeholder="Ex.: brigadeiro" autocomplete="off">
+    </div>
+</div>
+
+<section aria-labelledby="titulo-lista" aria-live="polite">
+    <h2 id="titulo-lista" class="visualmente-oculto">Lista de produtos</h2>
+    <div id="lista"></div>
+</section>
+
+<dialog class="dialogo dialogo-largo" id="dialogo-produto" aria-labelledby="titulo-dialogo-produto">
+    <form class="dialogo-conteudo" id="form-produto" novalidate>
+        <div class="dialogo-cabecalho">
+            <h2 id="titulo-dialogo-produto">Novo produto</h2>
+            <button type="button" class="botao botao-icone" data-fechar-dialogo aria-label="Fechar">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="dialogo-corpo formulario">
+            <div class="alerta alerta-erro erro-geral" role="alert" hidden></div>
+            <div class="campo">
+                <label for="produto-nome">Nome</label>
+                <input id="produto-nome" name="nome" type="text" maxlength="120" required>
+            </div>
+            <div class="campo">
+                <label for="produto-descricao">Descrição <span class="texto-suave">(opcional, aparece no cardápio)</span></label>
+                <textarea id="produto-descricao" name="descricao" maxlength="2000" rows="2"></textarea>
+            </div>
+            <label class="caixa-selecao" id="campo-ativo" hidden>
+                <input type="checkbox" name="ativo" value="1">
+                Produto ativo (disponível para venda)
+            </label>
+
+            <fieldset class="campo" data-campo="materiasPrimas" style="border: 0; padding: 0; margin: 0;">
+                <legend class="rotulo" style="margin-bottom: 0.5rem;">Receita (matérias-primas)</legend>
+                <div class="alerta alerta-aviso" id="aviso-sem-materias" hidden>
+                    <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+                    <span>Você ainda não tem matérias-primas. <a href="{{PATH}}materias-primas/">Cadastre os ingredientes</a> antes de montar a receita.</span>
+                </div>
+                <div class="linhas-itens" id="linhas-materias"></div>
+                <div>
+                    <button type="button" class="botao botao-secundario botao-pequeno" id="adicionar-materia">
+                        <i class="fa-solid fa-plus" aria-hidden="true"></i>Adicionar matéria-prima
+                    </button>
+                </div>
+            </fieldset>
+            <div class="grade-campos">
+                <div class="campo">
+                    <label for="produto-rendimento">Rendimento da receita</label>
+                    <input id="produto-rendimento" name="rendimento" type="text" inputmode="decimal" required aria-describedby="dica-rendimento">
+                    <p class="dica" id="dica-rendimento">Quantas unidades a receita produz. Ex.: 20 brigadeiros.</p>
+                </div>
+                <div class="campo">
+                    <label for="produto-preco">Preço de venda por unidade (R$)</label>
+                    <input id="produto-preco" name="precoVenda" type="text" inputmode="decimal" placeholder="0,00" required>
+                </div>
+            </div>
+
+            <div class="resumo-custo" role="status" aria-label="Resumo de custos">
+                <div><span>Custo da receita</span><strong id="resumo-custo-receita">R$ 0,00</strong></div>
+                <div><span>Custo por unidade</span><strong id="resumo-custo-unitario">R$ 0,00</strong></div>
+                <div><span>Lucro por unidade</span><strong id="resumo-lucro">R$ 0,00</strong></div>
+                <div><span>Margem de lucro</span><strong id="resumo-margem">0%</strong></div>
+            </div>
+        </div>
+        <div class="dialogo-rodape">
+            <button type="button" class="botao botao-secundario" data-fechar-dialogo>Cancelar</button>
+            <button type="submit" class="botao">Salvar produto</button>
+        </div>
+    </form>
+</dialog>
+
+<script type="module" src="{{PATH}}Assets/js/paginas/produtos.js?v={{VERSAO}}"></script>

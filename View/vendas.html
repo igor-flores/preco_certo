@@ -1,0 +1,56 @@
+<header class="cabecalho-pagina">
+    <div>
+        <h1>Histórico de vendas</h1>
+        <p class="texto-suave">Valor, custo e lucro de cada pedido. O lucro considera os itens vendidos menos o custo das matérias-primas.</p>
+    </div>
+</header>
+
+<form class="cartao filtros" id="form-filtros" role="search" novalidate>
+    <div class="alerta alerta-erro erro-geral" role="alert" hidden style="flex-basis: 100%;"></div>
+    <div class="campo">
+        <label for="filtro-cliente">Cliente</label>
+        <input id="filtro-cliente" name="cliente" type="search" placeholder="Nome do cliente" autocomplete="off">
+    </div>
+    <div class="campo">
+        <label for="filtro-produto">Produto vendido</label>
+        <select id="filtro-produto" name="idProduto">
+            <option value="">Todos</option>
+        </select>
+    </div>
+    <div class="campo">
+        <label for="filtro-inicio">De</label>
+        <input id="filtro-inicio" name="dataInicio" type="date">
+    </div>
+    <div class="campo">
+        <label for="filtro-fim">Até</label>
+        <input id="filtro-fim" name="dataFim" type="date">
+    </div>
+    <div class="campo">
+        <label for="filtro-situacao">Situação</label>
+        <select id="filtro-situacao" name="situacao">
+            <option value="">Todas, exceto canceladas</option>
+            <option value="concluido">Concluído</option>
+            <option value="aguardando_confirmacao">Aguardando confirmação</option>
+            <option value="em_producao">Em produção</option>
+            <option value="pronto_retirada">Pronto para retirada</option>
+            <option value="em_rota_entrega">Em rota de entrega</option>
+            <option value="cancelado">Cancelado</option>
+        </select>
+    </div>
+    <div class="linha">
+        <button type="submit" class="botao"><i class="fa-solid fa-filter" aria-hidden="true"></i>Filtrar</button>
+        <button type="reset" class="botao botao-secundario">Limpar</button>
+    </div>
+</form>
+
+<section class="indicadores" id="resumo" aria-label="Resumo das vendas filtradas" aria-live="polite"></section>
+
+<section aria-labelledby="titulo-vendas">
+    <h2 id="titulo-vendas" class="visualmente-oculto">Vendas</h2>
+    <div id="lista"></div>
+    <div class="carregar-mais" style="margin-top: 1rem;">
+        <button type="button" class="botao botao-secundario" id="carregar-mais" hidden>Carregar mais vendas</button>
+    </div>
+</section>
+
+<script type="module" src="{{PATH}}Assets/js/paginas/vendas.js?v={{VERSAO}}"></script>

@@ -1,0 +1,37 @@
+<div class="caixa-acesso">
+    <a class="marca-acesso" href="{{PATH}}">
+        <span class="marca-icone"><i class="fa-solid fa-tags" aria-hidden="true"></i></span>
+        Preço Certo
+    </a>
+    <section class="cartao" aria-labelledby="titulo-cadastro">
+        <h1 id="titulo-cadastro">Cadastre seu negócio</h1>
+        <p class="subtitulo">Controle custos, preços e pedidos em um só lugar.</p>
+        <form id="form-cadastro" class="formulario" novalidate>
+            <div class="campo">
+                <label for="nome-negocio">Nome do negócio</label>
+                <input id="nome-negocio" name="nomeNegocio" type="text" maxlength="120" autocomplete="organization" required>
+            </div>
+            <div class="campo">
+                <label for="nome-responsavel">Seu nome</label>
+                <input id="nome-responsavel" name="nomeResponsavel" type="text" maxlength="120" autocomplete="name" required>
+            </div>
+            <div class="campo">
+                <label for="email">E-mail</label>
+                <input id="email" name="email" type="email" maxlength="150" autocomplete="email" required>
+            </div>
+            <div class="campo">
+                <label for="senha">Senha</label>
+                <div class="campo-senha">
+                    <input id="senha" name="senha" type="password" maxlength="72" autocomplete="new-password" aria-describedby="dica-senha" required>
+                    <button type="button" class="botao botao-icone" data-alternar-senha="senha" aria-label="Mostrar senha">
+                        <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <p class="dica" id="dica-senha">Mínimo de 8 caracteres, combinando letras maiúsculas, minúsculas, números e símbolos.</p>
+            </div>
+            <button class="botao botao-bloco" type="submit">Criar conta</button>
+        </form>
+    </section>
+    <p class="troca-acesso">Já tem conta? <a href="{{PATH}}entrar/">Entrar</a></p>
+</div>
+<script type="module" src="{{PATH}}Assets/js/paginas/cadastro.js?v={{VERSAO}}"></script>

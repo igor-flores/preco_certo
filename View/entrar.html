@@ -1,0 +1,32 @@
+<div class="caixa-acesso">
+    <a class="marca-acesso" href="{{PATH}}">
+        <span class="marca-icone"><i class="fa-solid fa-tags" aria-hidden="true"></i></span>
+        Preço Certo
+    </a>
+    <section class="cartao" aria-labelledby="titulo-entrar">
+        <h1 id="titulo-entrar">Entrar</h1>
+        <p class="subtitulo">Acesse a gestão do seu negócio.</p>
+        <div class="alerta alerta-aviso" id="aviso-expirou" role="status" hidden>
+            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+            Sua sessão expirou por inatividade. Entre novamente.
+        </div>
+        <form id="form-entrar" class="formulario" novalidate>
+            <div class="campo">
+                <label for="email">E-mail</label>
+                <input id="email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <div class="campo">
+                <label for="senha">Senha</label>
+                <div class="campo-senha">
+                    <input id="senha" name="senha" type="password" autocomplete="current-password" required>
+                    <button type="button" class="botao botao-icone" data-alternar-senha="senha" aria-label="Mostrar senha">
+                        <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <button class="botao botao-bloco" type="submit">Entrar</button>
+        </form>
+    </section>
+    <p class="troca-acesso">Ainda não tem conta? <a href="{{PATH}}cadastro/">Cadastre seu negócio</a></p>
+</div>
+<script type="module" src="{{PATH}}Assets/js/paginas/entrar.js?v={{VERSAO}}"></script>

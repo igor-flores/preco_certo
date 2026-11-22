@@ -1,0 +1,64 @@
+<header class="cabecalho-pagina">
+    <div>
+        <h1>Matérias-primas</h1>
+        <p class="texto-suave">Ingredientes e insumos usados nas receitas, com o preço pago na embalagem.</p>
+    </div>
+    <button type="button" class="botao" id="botao-nova">
+        <i class="fa-solid fa-plus" aria-hidden="true"></i>Nova matéria-prima
+    </button>
+</header>
+
+<div class="filtros" role="search">
+    <div class="campo">
+        <label for="busca">Buscar pelo nome</label>
+        <input id="busca" type="search" placeholder="Ex.: farinha" autocomplete="off">
+    </div>
+</div>
+
+<section aria-labelledby="titulo-lista" aria-live="polite">
+    <h2 id="titulo-lista" class="visualmente-oculto">Lista de matérias-primas</h2>
+    <div id="lista"></div>
+</section>
+
+<dialog class="dialogo" id="dialogo-materia" aria-labelledby="titulo-dialogo-materia">
+    <form class="dialogo-conteudo" id="form-materia" novalidate>
+        <div class="dialogo-cabecalho">
+            <h2 id="titulo-dialogo-materia">Nova matéria-prima</h2>
+            <button type="button" class="botao botao-icone" data-fechar-dialogo aria-label="Fechar">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="dialogo-corpo formulario">
+            <div class="alerta alerta-erro erro-geral" role="alert" hidden></div>
+            <div class="campo">
+                <label for="materia-nome">Nome</label>
+                <input id="materia-nome" name="nome" type="text" maxlength="120" required>
+            </div>
+            <div class="grade-campos">
+                <div class="campo">
+                    <label for="materia-unidade">Unidade de medida</label>
+                    <select id="materia-unidade" name="unidadeMedida" required></select>
+                </div>
+                <div class="campo">
+                    <label for="materia-quantidade">Quantidade na embalagem</label>
+                    <input id="materia-quantidade" name="quantidadeEmbalagem" type="text" inputmode="decimal" required aria-describedby="dica-quantidade">
+                    <p class="dica" id="dica-quantidade">Ex.: 395 (g) para uma lata de leite condensado.</p>
+                </div>
+                <div class="campo">
+                    <label for="materia-preco">Preço pago (R$)</label>
+                    <input id="materia-preco" name="precoEmbalagem" type="text" inputmode="decimal" placeholder="0,00" required>
+                </div>
+            </div>
+            <div class="alerta alerta-info" id="previa-custo" role="status">
+                <i class="fa-solid fa-calculator" aria-hidden="true"></i>
+                <span>Preencha a quantidade e o preço para ver o custo por unidade.</span>
+            </div>
+        </div>
+        <div class="dialogo-rodape">
+            <button type="button" class="botao botao-secundario" data-fechar-dialogo>Cancelar</button>
+            <button type="submit" class="botao">Salvar</button>
+        </div>
+    </form>
+</dialog>
+
+<script type="module" src="{{PATH}}Assets/js/paginas/materias-primas.js?v={{VERSAO}}"></script>

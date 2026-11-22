@@ -1,0 +1,554 @@
+{
+    "info": {
+        "name": "Preço Certo API",
+        "description": "API do sistema Preço Certo.\n\nFluxo sugerido: Autenticação > Cadastrar (ou Entrar) > Matéria-prima > Cadastrar > Produto > Cadastrar > Cardápio > Salvar > Público > Realizar pedido > Pedidos > Listar > Alterar situação.\n\nA sessão usa cookie (precocerto): o Postman guarda automaticamente após Cadastrar ou Entrar. Os IDs, o link do cardápio e o hash do pedido são salvos nas variáveis da collection pelos scripts de teste.\n\nErros retornam {\"error\": \"mensagem\", \"campo\": \"nomeDoCampo\"}.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        { "key": "baseUrl", "value": "http://localhost:8080/api" },
+        { "key": "email", "value": "ana@exemplo.com" },
+        { "key": "senha", "value": "Senha@123" },
+        { "key": "idMateriaPrima", "value": "" },
+        { "key": "idProduto", "value": "" },
+        { "key": "idPedido", "value": "" },
+        { "key": "linkPublico", "value": "" },
+        { "key": "hashAcompanhamento", "value": "" }
+    ],
+    "item": [
+        {
+            "name": "Autenticação",
+            "item": [
+                {
+                    "name": "Cadastrar (RF001)",
+                    "request": {
+                        "method": "POST",
+                        "header": [{ "key": "Content-Type", "value": "application/json" }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nomeNegocio\": \"Doces da Ana\",\n    \"nomeResponsavel\": \"Ana Souza\",\n    \"email\": \"{{email}}\",\n    \"senha\": \"{{senha}}\"\n}",
+                            "options": { "raw": { "language": "json" } }
+                        },
+                        "url": { "raw": "{{baseUrl}}/cadastro", "host": ["{{baseUrl}}"], "path": ["cadastro"] },
+                        "description": "Cria a conta e já inicia a sessão. Senha: mínimo 8 caracteres combinando maiúsculas, minúsculas, números e símbolos. E-mail repetido retorna 409."
+                    }
+                },
+                {
+                    "name": "Entrar (RF002)",
+                    "request": {
+                        "method": "POST",
+                        "header": [{ "key": "Content-Type", "value": "application/json" }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"{{email}}\",\n    \"senha\": \"{{senha}}\"\n}",
+                            "options": { "raw": { "language": "json" } }
+                        },
+                        "url": { "raw": "{{baseUrl}}/sessao", "host": ["{{baseUrl}}"], "path": ["sessao"] },
+                        "description": "Inicia a sessão. Ela expira após 3 horas de inatividade."
+                    }
+                },
+                {
+                    "name": "Usuário logado",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": { "raw": "{{baseUrl}}/sessao", "host": ["{{baseUrl}}"], "path": ["sessao"] },
+                        "description": "Retorna os dados do produtor logado ou 401 se não houver sessão."
+                    }
+                },
+                {
+                    "name": "Sair",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": { "raw": "{{baseUrl}}/sessao", "host": ["{{baseUrl}}"], "path": ["sessao"] }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Matéria-prima (RF003)",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/materia-prima",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["materia-prima"],
+                            "query": [{ "key": "busca", "value": "", "description": "Filtra pelo nome", "disabled": true }]
+                        }
+                    }
+                },
+                {
+                    "name": "Buscar",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/materia-prima?id={{idMateriaPrima}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["materia-prima"],
+                            "query": [{ "key": "id", "value": "{{idMateriaPrima}}" }]
+                        }
+                    }
+                },
+                {
+                    "name": "Cadastrar",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "    pm.collectionVariables.set(\"idMateriaPrima\", pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [{ "key": "Content-Type", "value": "application/json" }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nome\": \"Leite condensado\",\n    \"unidadeMedida\": \"g\",\n    \"quantidadeEmbalagem\": 395,\n    \"precoEmbalagem\": 7.90\n}",
+                            "options": { "raw": { "language": "json" } }
+                        },
+                        "url": { "raw": "{{baseUrl}}/materia-prima", "host": ["{{baseUrl}}"], "path": ["materia-prima"] },
+                        "description": "unidadeMedida: mg, g, kg, ml, l, un, dz. Valores decimais aceitam 7.90 ou \"7,90\"."
+                    }
+                },
+                {
+                    "name": "Atualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [{ "key": "Content-Type", "value": "application/json" }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nome\": \"Leite condensado\",\n    \"unidadeMedida\": \"g\",\n    \"quantidadeEmbalagem\": 395,\n    \"precoEmbalagem\": 8.49\n}",
+                            "options": { "raw": { "language": "json" } }
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/materia-prima?id={{idMateriaPrima}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["materia-prima"],
+                            "query": [{ "key": "id", "value": "{{idMateriaPrima}}" }]
+                        },
+                        "description": "Envia todos os campos. A unidade só pode mudar para outra do mesmo tipo das usadas nos produtos."
+                    }
+                },
+                {
+                    "name": "Excluir",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/materia-prima?id={{idMateriaPrima}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["materia-prima"],
+                            "query": [{ "key": "id", "value": "{{idMateriaPrima}}" }]
+                        },
+                        "description": "Retorna 409 se a matéria-prima estiver em algum produto."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Produto (RF004)",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/produto",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["produto"],
+                            "query": [
+                                { "key": "ativo", "value": "true", "description": "true ou false", "disabled": true },
+                                { "key": "busca", "value": "", "description": "Filtra pelo nome", "disabled": true }
+                            ]
+                        },
+                        "description": "Lista com custo unitário, lucro unitário e margem de lucro calculados."
+                    }
+                },
+                {
+                    "name": "Buscar",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/produto?id={{idProduto}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["produto"],
+                            "query": [{ "key": "id", "value": "{{idProduto}}" }]
+                        },
+                        "description": "Inclui as matérias-primas da receita com o custo de cada uma."
+                    }
+                },
+                {
+                    "name": "Cadastrar",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "    pm.collectionVariables.set(\"idProduto\", pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [{ "key": "Content-Type", "value": "application/json" }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nome\": \"Brigadeiro\",\n    \"descricao\": \"Brigadeiro tradicional\",\n    \"rendimento\": 20,\n    \"precoVenda\": 2.50,\n    \"materiasPrimas\": [\n        {\n            \"idMateriaPrima\": {{idMateriaPrima}},\n            \"quantidade\": 395,\n            \"unidadeMedida\": \"g\"\n        }\n    ]\n}",
+                            "options": { "raw": { "language": "json" } }
+                        },
+                        "url": { "raw": "{{baseUrl}}/produto", "host": ["{{baseUrl}}"], "path": ["produto"] },
+                        "description": "rendimento = quantas unidades a receita produz. A unidade de cada matéria-prima na receita pode ser diferente da cadastrada, desde que do mesmo tipo (ex.: g para uma matéria-prima em kg)."
+                    }
+                },
+                {
+                    "name": "Atualizar",
+                    "request": {
+                        "method": "PUT",
+                        "header": [{ "key": "Content-Type", "value": "application/json" }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nome\": \"Brigadeiro\",\n    \"descricao\": \"Brigadeiro tradicional\",\n    \"rendimento\": 25,\n    \"precoVenda\": 3.00,\n    \"ativo\": true,\n    \"materiasPrimas\": [\n        {\n            \"idMateriaPrima\": {{idMateriaPrima}},\n            \"quantidade\": 395,\n            \"unidadeMedida\": \"g\"\n        }\n    ]\n}",
+                            "options": { "raw": { "language": "json" } }
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/produto?id={{idProduto}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["produto"],
+                            "query": [{ "key": "id", "value": "{{idProduto}}" }]
+                        },
+                        "description": "Substitui todos os dados e a receita. Use \"ativo\": true para reativar um produto desativado."
+                    }
+                },
+                {
+                    "name": "Desativar",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/produto?id={{idProduto}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["produto"],
+                            "query": [{ "key": "id", "value": "{{idProduto}}" }]
+                        },
+                        "description": "Apenas desativa (mantém o histórico de vendas). Some do cardápio público."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Cardápio (RF005)",
+            "item": [
+                {
+                    "name": "Ver configuração",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "if (pm.response.code === 200 && pm.response.json().linkPublico) {",
+                                    "    pm.collectionVariables.set(\"linkPublico\", pm.response.json().linkPublico);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": { "raw": "{{baseUrl}}/cardapio", "host": ["{{baseUrl}}"], "path": ["cardapio"] },
+                        "description": "linkPublico vem null até o primeiro salvamento."
+                    }
+                },
+                {
+                    "name": "Salvar",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    pm.collectionVariables.set(\"linkPublico\", pm.response.json().linkPublico);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [{ "key": "Content-Type", "value": "application/json" }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"corPrimaria\": \"#1F2937\",\n    \"corSecundaria\": \"#F59E0B\",\n    \"endereco\": \"Rua das Flores, 100 - Canoas/RS\",\n    \"formasPagamento\": [\"Pix\", \"Dinheiro\", \"Cartão de crédito\"],\n    \"taxaEntrega\": 5.00,\n    \"produtos\": [{{idProduto}}]\n}",
+                            "options": { "raw": { "language": "json" } }
+                        },
+                        "url": { "raw": "{{baseUrl}}/cardapio", "host": ["{{baseUrl}}"], "path": ["cardapio"] },
+                        "description": "Cores em hexadecimal (#RRGGBB). produtos = IDs de produtos ativos. O link público é gerado no primeiro salvamento e não muda mais. A resposta traz corTextoPrimaria/corTextoSecundaria com a cor de texto de melhor contraste."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Público (sem login)",
+            "item": [
+                {
+                    "name": "Consultar cardápio (RF006)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/cardapio-publico?link={{linkPublico}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["cardapio-publico"],
+                            "query": [{ "key": "link", "value": "{{linkPublico}}" }]
+                        },
+                        "description": "Mostra apenas produtos ativos selecionados no cardápio, sem custos."
+                    }
+                },
+                {
+                    "name": "Realizar pedido (RF007)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "    pm.collectionVariables.set(\"hashAcompanhamento\", pm.response.json().hashAcompanhamento);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [{ "key": "Content-Type", "value": "application/json" }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nome\": \"Carlos Lima\",\n    \"telefone\": \"(51) 99999-0000\",\n    \"tipoEntrega\": \"entrega\",\n    \"endereco\": \"Rua B, 20 - Canoas/RS\",\n    \"formaPagamento\": \"Pix\",\n    \"itens\": [\n        {\n            \"idProduto\": {{idProduto}},\n            \"quantidade\": 10\n        }\n    ]\n}",
+                            "options": { "raw": { "language": "json" } }
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/pedido-publico?link={{linkPublico}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["pedido-publico"],
+                            "query": [{ "key": "link", "value": "{{linkPublico}}" }]
+                        },
+                        "description": "tipoEntrega: retirada ou entrega (entrega exige endereco). formaPagamento deve ser uma das configuradas no cardápio. Preços e taxa vêm do servidor. Retorna os dados de acompanhamento com o hashAcompanhamento."
+                    }
+                },
+                {
+                    "name": "Acompanhar pedido (RF008)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/pedido-publico?hash={{hashAcompanhamento}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["pedido-publico"],
+                            "query": [{ "key": "hash", "value": "{{hashAcompanhamento}}" }]
+                        },
+                        "description": "Itens, total, situação atual e histórico com o horário de cada mudança."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Pedidos",
+            "item": [
+                {
+                    "name": "Listar (RF009)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const pedidos = pm.response.json().pedidos || [];",
+                                    "if (pm.response.code === 200 && pedidos.length) {",
+                                    "    pm.collectionVariables.set(\"idPedido\", pedidos[0].id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/pedido?limite=50&offset=0",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["pedido"],
+                            "query": [
+                                { "key": "situacao", "value": "aguardando_confirmacao", "description": "aguardando_confirmacao, em_producao, pronto_retirada, em_rota_entrega, concluido, cancelado", "disabled": true },
+                                { "key": "origem", "value": "cardapio", "description": "cardapio ou manual", "disabled": true },
+                                { "key": "limite", "value": "50", "description": "1 a 100" },
+                                { "key": "offset", "value": "0" }
+                            ]
+                        },
+                        "description": "Salva o ID do pedido mais recente em idPedido."
+                    }
+                },
+                {
+                    "name": "Buscar",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/pedido?id={{idPedido}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["pedido"],
+                            "query": [{ "key": "id", "value": "{{idPedido}}" }]
+                        },
+                        "description": "Detalhe com cliente, itens, custo, lucro, margem e histórico de situações."
+                    }
+                },
+                {
+                    "name": "Alterar situação (RF009)",
+                    "request": {
+                        "method": "PUT",
+                        "header": [{ "key": "Content-Type", "value": "application/json" }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"situacao\": \"em_producao\"\n}",
+                            "options": { "raw": { "language": "json" } }
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/pedido?id={{idPedido}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["pedido"],
+                            "query": [{ "key": "id", "value": "{{idPedido}}" }]
+                        },
+                        "description": "situacao: aguardando_confirmacao, em_producao, pronto_retirada (só retirada), em_rota_entrega (só entrega), concluido, cancelado. Pedidos concluídos ou cancelados não mudam mais."
+                    }
+                },
+                {
+                    "name": "Cadastrar pedido manual (RF010)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "    pm.collectionVariables.set(\"idPedido\", pm.response.json().id);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [{ "key": "Content-Type", "value": "application/json" }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nome\": \"Maria Pereira\",\n    \"telefone\": \"51988887777\",\n    \"tipoEntrega\": \"retirada\",\n    \"formaPagamento\": \"Dinheiro\",\n    \"situacao\": \"concluido\",\n    \"dataPedido\": \"2026-11-10 14:30\",\n    \"itens\": [\n        {\n            \"idProduto\": {{idProduto}},\n            \"quantidade\": 5\n        }\n    ]\n}",
+                            "options": { "raw": { "language": "json" } }
+                        },
+                        "url": { "raw": "{{baseUrl}}/pedido", "host": ["{{baseUrl}}"], "path": ["pedido"] },
+                        "description": "Venda feita fora da plataforma. Opcionais: situacao (padrão aguardando_confirmacao), dataPedido (AAAA-MM-DD HH:MM, não pode ser futura) e taxaEntrega (só para entrega)."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Clientes",
+            "item": [
+                {
+                    "name": "Listar",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/cliente",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["cliente"],
+                            "query": [{ "key": "busca", "value": "", "description": "Nome ou telefone", "disabled": true }]
+                        },
+                        "description": "Clientes são criados automaticamente nos pedidos (identificados pelo telefone)."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Vendas e relatórios",
+            "item": [
+                {
+                    "name": "Histórico de vendas (RF011)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/historico-vendas?limite=50&offset=0",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["historico-vendas"],
+                            "query": [
+                                { "key": "cliente", "value": "Maria", "description": "Parte do nome do cliente", "disabled": true },
+                                { "key": "idCliente", "value": "", "disabled": true },
+                                { "key": "idProduto", "value": "{{idProduto}}", "description": "Pedidos que contêm o produto", "disabled": true },
+                                { "key": "dataInicio", "value": "2026-11-01", "description": "AAAA-MM-DD", "disabled": true },
+                                { "key": "dataFim", "value": "2026-11-30", "description": "AAAA-MM-DD", "disabled": true },
+                                { "key": "situacao", "value": "concluido", "description": "Sem filtro, exclui cancelados", "disabled": true },
+                                { "key": "limite", "value": "50" },
+                                { "key": "offset", "value": "0" }
+                            ]
+                        },
+                        "description": "Valor, custo e lucro por pedido, mais um resumo do filtro. Lucro = valor dos itens - custo das matérias-primas (sem a taxa de entrega)."
+                    }
+                },
+                {
+                    "name": "Relatório financeiro (RF012)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/relatorio-financeiro?periodo=mes",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["relatorio-financeiro"],
+                            "query": [
+                                { "key": "periodo", "value": "mes", "description": "semana, mes ou ano" },
+                                { "key": "referencia", "value": "2026-10-15", "description": "Data dentro do período a analisar (padrão: hoje)", "disabled": true }
+                            ]
+                        },
+                        "description": "Compara o período com o anterior: faturamento, custo, lucro, margem e variação percentual. Considera só pedidos concluídos."
+                    }
+                },
+                {
+                    "name": "Estimativa de vendas (RF013)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/estimativa-vendas?periodo=mes&periodos=6",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["estimativa-vendas"],
+                            "query": [
+                                { "key": "periodo", "value": "mes", "description": "semana, mes ou ano" },
+                                { "key": "periodos", "value": "6", "description": "Quantos períodos anteriores usar (2 a 24)" }
+                            ]
+                        },
+                        "description": "Projeção para o período atual por regressão linear dos períodos anteriores. Precisa de pelo menos 2 períodos com vendas concluídas."
+                    }
+                }
+            ]
+        }
+    ]
+}
